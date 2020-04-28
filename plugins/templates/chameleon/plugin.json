@@ -1,0 +1,33 @@
+{
+  "name": "ChameleonTheme",
+  "description": "Optionally adjustable theme",
+  "version": "1.0",
+  "api": "^8.0",
+  "class": "Configurable",
+  "url": "https://jdanek.eu/",
+  "responsive": true,
+  "css": [
+    "Resources/styles/regrid.css",
+    "Resources/styles/style.php"
+  ],
+  "js": [
+    "Resources/js/init.js"
+  ],
+  "layouts": {
+    "default": {
+      "template": "template.php",
+      "slots": [
+        "left",
+        "right"
+      ]
+    }
+  },
+  "dark": false,
+  "smiley.count": 10,
+  "smiley.format": "gif",
+  "bbcode.buttons": true,
+  "box.parent": "ul",
+  "box.item": "li",
+  "box.title": "h2",
+  "box.title.inside": true
+}

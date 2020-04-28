@@ -1,0 +1,2 @@
+Obrázek hlavičky MUSÍ BÝT vysoký 240px a měl by být alespoň 1200px široký.
+The header image MUST BE 240px high and should be at least 1200px wide.
