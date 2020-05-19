@@ -263,9 +263,15 @@ if ($cdark) {
         border-top-right-radius: <?php echo ($config->offsetGet('rounded') ? '5px' : '0px'); ?>;
         border-top-left-radius: <?php echo ($config->offsetGet('rounded') ? '5px' : '0px'); ?>;
         margin-top: 0.5rem;
-        background-image: url('<?php echo $theme_path ;?>images/headers/<?php echo $header_bg; ?>');
+		background-color: <?php echo $theme_lighter;?>;
+        background-image: url('<?php echo $theme_path ;?>images/headers/<?php echo $header_bg; ?>'), radial-gradient(circle, <?php echo $theme_bar;?> 0%, <?php echo $theme_lighter; ?> 60%);
         background-repeat: no-repeat;
         background-position: top center;
+		background-size: cover;	
+		-ms-background-size: cover;
+		-o-background-size: cover;
+		-moz-background-size: cover;
+		-webkit-background-size: cover;
     }
 
     h1, h2, h3 {
