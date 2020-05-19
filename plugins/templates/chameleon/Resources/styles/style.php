@@ -32,7 +32,7 @@ if ($random) {
 }
 $header_bg = $config->offsetGet('header');
 $color_schema = ($random ? Math::randomInt(0, 10) : $config->offsetGet('active'));
-$GLOBALS['cdark'] = ($random ? (bool)Math::randomInt(0, 1) : $config->offsetGet('dark_mode'));
+$GLOBALS['cdark'] = ($random ? (bool) Math::randomInt(0, 1) : $config->offsetGet('dark_mode'));
 
 global $hue, $sat, $cdark, $light;
 
@@ -167,7 +167,6 @@ switch ($color_schema) {
     case 9:
         $hue = 170;
         if (!$cdark) {
-
         } else {
             $theme_link_loff -= 20;
         }
@@ -236,26 +235,25 @@ if ($cdark) {
 ?>
 /*
 <style>
-
     /* Chameleon theme */
     html {
         margin-left: calc(100vw - 100%);
     }
 
     body {
-        color: <?php echo $theme_text;?>;
+        color: <?php echo $theme_text; ?>;
         margin: 0px;
         padding: 0px;
-        background: <?php echo $theme_lightest; ?> url('<?php echo $theme_path ;?>images/patterns/<?php echo $pattern; ?>.png') repeat;
+        background: <?php echo $theme_lightest; ?> url('<?php echo $theme_path; ?>images/patterns/<?php echo $pattern; ?>.png') repeat;
         background-attachment: fixed;
         font-family: 'Source Sans Pro', sans-serif;
     }
 
     #wrapper.container {
         background-color: <?php echo $theme_white; ?>;
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
         border-radius: <?php echo ($config->offsetGet('rounded') ? '10px' : '0px'); ?>;
-        box-shadow: 0px 10px 25px -6px <?php echo $theme_alpha_shadow;?>;
+        box-shadow: 0px 10px 25px -6px <?php echo $theme_alpha_shadow; ?>;
         margin: 10px auto;
     }
 
@@ -263,18 +261,20 @@ if ($cdark) {
         border-top-right-radius: <?php echo ($config->offsetGet('rounded') ? '5px' : '0px'); ?>;
         border-top-left-radius: <?php echo ($config->offsetGet('rounded') ? '5px' : '0px'); ?>;
         margin-top: 0.5rem;
-		background-color: <?php echo $theme_lighter;?>;
-        background-image: url('<?php echo $theme_path ;?>images/headers/<?php echo $header_bg; ?>'), radial-gradient(circle, <?php echo $theme_bar;?> 0%, <?php echo $theme_lighter; ?> 60%);
+        background-color: <?php echo $theme_lighter; ?>;
+        background-image: url('<?php echo $theme_path; ?>images/headers/<?php echo $header_bg; ?>'), radial-gradient(circle, <?php echo $theme_bar; ?> 0%, <?php echo $theme_lighter; ?> 60%);
         background-repeat: no-repeat;
         background-position: top center;
-		background-size: cover;	
-		-ms-background-size: cover;
-		-o-background-size: cover;
-		-moz-background-size: cover;
-		-webkit-background-size: cover;
+        background-size: cover;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
     }
 
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
         margin: 0;
         padding: 0;
         font-weight: 300;
@@ -289,7 +289,7 @@ if ($cdark) {
     }
 
     a {
-        color: <?php echo $theme_link;?>;
+        color: <?php echo $theme_link; ?>;
     }
 
     #header {
@@ -310,7 +310,7 @@ if ($cdark) {
     }
 
     #header-usermenu li:not(:last-child):after {
-        color: <?php echo $theme_smoke_med;?>;
+        color: <?php echo $theme_smoke_med; ?>;
         content: " | ";
     }
 
@@ -324,14 +324,14 @@ if ($cdark) {
     }
 
     #logo div.site-name a {
-        color: <?php echo $theme_link;?>;
+        color: <?php echo $theme_link; ?>;
         text-decoration: none;
-        text-shadow: 0px 0px 5px<?php echo $theme_white;?>;
+        text-shadow: 0px 0px 5px<?php echo $theme_white; ?>;
     }
 
     span.site-description {
         font-weight: bold;
-        text-shadow: 0px 0px 5px<?php echo $theme_white;?>;
+        text-shadow: 0px 0px 5px<?php echo $theme_white; ?>;
     }
 
     div#seachbox {
@@ -346,7 +346,7 @@ if ($cdark) {
 
     #menu {
         overflow: hidden;
-        background: <?php echo $theme_bar;?>;
+        background: <?php echo $theme_bar; ?>;
         margin-bottom: 1rem;
     }
 
@@ -384,8 +384,7 @@ if ($cdark) {
         text-decoration: underline;
     }
 
-    #menu li.active a {
-    }
+    #menu li.active a {}
 
     #menu .last {
         border-right: none;
@@ -394,10 +393,10 @@ if ($cdark) {
     #breadcrumbs {
         font-size: 0.75rem;
         margin-bottom: 0.3rem;
-        color: <?php echo $theme_smoke_text;?>;
+        color: <?php echo $theme_smoke_text; ?>;
     }
 
-    #breadcrumbs span{
+    #breadcrumbs span {
         font-weight: bold;
     }
 
@@ -427,7 +426,7 @@ if ($cdark) {
 
     #breadcrumbs ul.breadcrumbs li:not(:last-child):after {
         content: " >";
-        color: <?php echo $theme_smoke_text;?>;
+        color: <?php echo $theme_smoke_text; ?>;
     }
 
 
@@ -442,7 +441,7 @@ if ($cdark) {
 
     #footer li:not(:last-child):after {
         content: " \2022 ";
-        color: <?php echo $theme_smoke_text;?>;
+        color: <?php echo $theme_smoke_text; ?>;
     }
 
     /*=========================================================*/
@@ -461,18 +460,19 @@ if ($cdark) {
     }
 
     ul.boxes ul.menu {
-        padding-left: 20px ;
+        padding-left: 20px;
     }
 
     .box-title {
         padding: 0.5em;
-        background: <?php echo $theme_bar;?>;
-        color: <?php echo $theme_white;?>;
+        background: <?php echo $theme_bar; ?>;
+        color: <?php echo $theme_white; ?>;
         margin: 10px 0;
     }
 
     /* Tables */
-    td, th {
+    td,
+    th {
         padding: 3px 5px;
     }
 
@@ -493,7 +493,7 @@ if ($cdark) {
     }
 
     .widetable {
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
     }
 
     .widetable td {
@@ -509,7 +509,7 @@ if ($cdark) {
     fieldset {
         margin: 1em 0;
         padding: 8px;
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
     }
 
     legend {
@@ -543,7 +543,7 @@ if ($cdark) {
     }
 
     legend {
-        color: <?php echo $theme_black;?>;
+        color: <?php echo $theme_black; ?>;
         font-weight: bold;
     }
 
@@ -595,7 +595,7 @@ if ($cdark) {
     }
 
     .list-perex-image {
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
         float: left;
         margin: 6px 6px 6px 0;
         max-width: 96px;
@@ -608,7 +608,7 @@ if ($cdark) {
         list-style-type: none;
         font-size: 0.9rem;
         font-style: italic;
-        color: <?php echo $theme_smoke_text;?>
+        color: <?php echo $theme_smoke_text; ?>
     }
 
     ul.list-info li {
@@ -626,7 +626,7 @@ if ($cdark) {
     }
 
     ul.list-info a {
-        color: <?php echo $theme_smoke_text;?>;
+        color: <?php echo $theme_smoke_text; ?>;
         text-decoration: none;
     }
 
@@ -636,7 +636,7 @@ if ($cdark) {
 
     /* Article */
     .article-navigation {
-        border-bottom: 1px solid<?php echo $theme_smoke_med;?>;
+        border-bottom: 1px solid<?php echo $theme_smoke_med; ?>;
         margin-bottom: 15px;
         padding-bottom: 10px;
     }
@@ -647,19 +647,19 @@ if ($cdark) {
     }
 
     .article-perex-image {
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
         float: right;
         margin: 0 8px 8px;
         max-width: 150px;
     }
 
     .article-footer {
-        color: <?php echo $theme_smoke_text;?>;
+        color: <?php echo $theme_smoke_text; ?>;
         width: 100%;
     }
 
     .article-footer a {
-        color: <?php echo $theme_smoke_text;?>;
+        color: <?php echo $theme_smoke_text; ?>;
         text-decoration: none;
     }
 
@@ -675,7 +675,7 @@ if ($cdark) {
     }
 
     .article-rating {
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
         padding: 5px;
     }
 
@@ -691,7 +691,7 @@ if ($cdark) {
 
     /* User */
     .avatar {
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
     }
 
     .profiletable .avatartd {
@@ -719,7 +719,7 @@ if ($cdark) {
     }
 
     .messages-table {
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
         width: 100%
     }
 
@@ -740,7 +740,7 @@ if ($cdark) {
     .posts {
         margin-top: 20px;
         padding-top: 10px;
-        border-top: 1px solid<?php echo $theme_smoke_med;?>;
+        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
     }
 
     .posts-pm {
@@ -755,16 +755,16 @@ if ($cdark) {
         padding-bottom: 10px;
     }
 
-    .posts-form-buttons > span {
+    .posts-form-buttons>span {
         margin-left: 10px;
     }
 
-    .posts-form-buttons > span:first-child {
+    .posts-form-buttons>span:first-child {
         margin-left: 0;
     }
 
     .posts-form-buttons a.bbcode-button {
-        background: url("<?php echo $theme_path ;?>images/bbcode/button-body.png") left top no-repeat;
+        background: url("<?php echo $theme_path; ?>images/bbcode/button-body.png") left top no-repeat;
         /*display: inline-block;*/
         height: 16px;
         padding: 6px 4px;
@@ -780,7 +780,7 @@ if ($cdark) {
     }
 
     .post-list {
-        border-top: 1px solid<?php echo $theme_smoke_med;?>;
+        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
     }
 
     .post {
@@ -794,16 +794,16 @@ if ($cdark) {
     }
 
     .post-author-guest {
-        color: <?php echo $theme_smoke_text;?>;
+        color: <?php echo $theme_smoke_text; ?>;
     }
 
     .post-info {
-        color: <?php echo $theme_smoke_text;?>;
+        color: <?php echo $theme_smoke_text; ?>;
         font-size: 0.75rem;
     }
 
     .post-postlink {
-        color: <?php echo $theme_link;?>;
+        color: <?php echo $theme_link; ?>;
         float: right;
         font-size: 0.75rem;
         position: relative;
@@ -811,9 +811,7 @@ if ($cdark) {
         text-decoration: none;
     }
 
-    .post-actions {
-
-    }
+    .post-actions {}
 
     .post-actions a {
         font-size: 0.75rem;
@@ -842,7 +840,7 @@ if ($cdark) {
     .post-body {
         margin: 0;
         padding: 8px 0;
-        border-bottom: 1px solid<?php echo $theme_smoke_med;?>;
+        border-bottom: 1px solid<?php echo $theme_smoke_med; ?>;
     }
 
     .post-body-text {
@@ -896,8 +894,8 @@ if ($cdark) {
     }
 
     .topic-pages a {
-        background-color: <?php echo $theme_smoke_lightest;?>;
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        background-color: <?php echo $theme_smoke_lightest; ?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
         display: inline-block;
         margin: 0 2px;
         padding: 0 4px;
@@ -939,8 +937,8 @@ if ($cdark) {
     .poll,
     .sbox {
         margin: 1em 0;
-        border: 1px solid<?php echo $theme_smoke_med;?>;
-        background-color: <?php echo $theme_smoke_lightest;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        background-color: <?php echo $theme_smoke_lightest; ?>;
     }
 
     .poll {
@@ -948,7 +946,7 @@ if ($cdark) {
     }
 
     .poll-answer {
-        border-top: 1px solid<?php echo $theme_smoke_med;?>;
+        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
         padding: 6px 0 5px;
     }
 
@@ -957,7 +955,7 @@ if ($cdark) {
     }
 
     .poll-answer div {
-        background: url("<?php echo $theme_path ;?>images/system/votebar.gif") repeat-x;
+        background: url("<?php echo $theme_path; ?>images/system/votebar.gif") repeat-x;
         height: 11px;
         margin: 6px 2px 4px 0;
     }
@@ -998,7 +996,7 @@ if ($cdark) {
     }
 
     .sbox-item {
-        border-top: 1px solid<?php echo $theme_smoke_med;?>;
+        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
         padding: 10px 5px 10px 0;
     }
 
@@ -1014,12 +1012,12 @@ if ($cdark) {
     }
 
     .gallery img {
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
         margin: 3px;
     }
 
     .gallery td {
-        background-color: <?php echo $theme_lightest;?>;
+        background-color: <?php echo $theme_lightest; ?>;
         overflow: hidden;
         text-align: center;
         vertical-align: middle;
@@ -1037,8 +1035,8 @@ if ($cdark) {
 
     .paging a {
         padding: 0.2em 0.6em;
-        border: 1px solid<?php echo $theme_smoke_med;?>;
-        background-color: <?php echo $theme_smoke_lightest;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        background-color: <?php echo $theme_smoke_lightest; ?>;
         text-decoration: none;
     }
 
@@ -1049,7 +1047,7 @@ if ($cdark) {
 
     /* Security image (captcha) */
     .cimage {
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
         height: 41px;
         margin-left: 5px;
         vertical-align: top;
@@ -1068,7 +1066,7 @@ if ($cdark) {
     .message {
         color: #000;
         background: #fff no-repeat 5px 5px;
-        border: 1px solid<?php echo $theme_smoke_med;?>;
+        border: 1px solid<?php echo $theme_smoke_med; ?>;
         font-weight: bold;
         line-height: 120%;
         margin: 1em 0;
@@ -1076,15 +1074,15 @@ if ($cdark) {
     }
 
     .message-ok {
-        background-image: url("<?php echo $theme_path ;?>images/icons/info.png");
+        background-image: url("<?php echo $theme_path; ?>images/icons/info.png");
     }
 
     .message-warn {
-        background-image: url("<?php echo $theme_path ;?>images/icons/warning.png");
+        background-image: url("<?php echo $theme_path; ?>images/icons/warning.png");
     }
 
     .message-err {
-        background-image: url("<?php echo $theme_path ;?>images/icons/error.png");
+        background-image: url("<?php echo $theme_path; ?>images/icons/error.png");
     }
 
     .message ul {
@@ -1097,7 +1095,7 @@ if ($cdark) {
         display: block;
         height: 10px;
         margin-top: 10px;
-        border-top: 1px solid<?php echo $theme_smoke_med;?>;
+        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
     }
 
     .hr hr {
@@ -1116,7 +1114,10 @@ if ($cdark) {
     }
 
     /* Buttons */
-    a.button, button, input[type=submit], input[type=reset] {
+    a.button,
+    button,
+    input[type=submit],
+    input[type=reset] {
         display: inline-block;
         margin: 0;
         padding: 6px;
@@ -1138,7 +1139,10 @@ if ($cdark) {
         padding: 0 6px 0 0;
     }
 
-    a.button:hover, button:hover, input[type=submit]:hover, input[type=reset]:hover {
+    a.button:hover,
+    button:hover,
+    input[type=submit]:hover,
+    input[type=reset]:hover {
         background: <?php echo $theme_lightest; ?>;
         background: linear-gradient(to bottom, <?php echo $theme_lightest; ?>, <?php echo $theme_lighter; ?>);
         border-color: <?php echo $theme_lighter; ?>;
@@ -1165,14 +1169,14 @@ if ($cdark) {
     }
 
     .hint {
-        color: <?php echo $theme_smoke_med;?>;
+        color: <?php echo $theme_smoke_med; ?>;
         font-size: 0.625rem;
         padding: 0 4px;
     }
 
     .bborder {
         padding-bottom: 0.8em;
-        border-bottom: 1px solid<?php echo $theme_smoke_med;?>;
+        border-bottom: 1px solid<?php echo $theme_smoke_med; ?>;
     }
 
     .wlimiter {
@@ -1193,7 +1197,8 @@ if ($cdark) {
         vertical-align: middle;
     }
 
-    a .icon, .text-icon .icon {
+    a .icon,
+    .text-icon .icon {
         padding-right: 5px;
     }
 
@@ -1268,12 +1273,12 @@ if ($cdark) {
         padding: 5px 5px 5px 10px;
         text-decoration: underline;
         background: none;
-        color: <?php echo $theme_link;?>;
+        color: <?php echo $theme_link; ?>;
         display: block;
     }
 
     .sidenav ul li a:hover {
-        color: <?php echo $theme_link;?>;
+        color: <?php echo $theme_link; ?>;
     }
 
     @media screen and (max-height: 450px) {
@@ -1301,7 +1306,7 @@ if ($cdark) {
 
         #wrapper.container {
             background-color: <?php echo $theme_white; ?>;
-            border: 1px solid<?php echo $theme_smoke_med;?>;
+            border: 1px solid<?php echo $theme_smoke_med; ?>;
             border-radius: 0;
             box-shadow: none;
             margin: 0;
@@ -1322,7 +1327,8 @@ if ($cdark) {
             padding: 20px 0px 0px 10px;
         }
 
-        #header, #logo {
+        #header,
+        #logo {
             height: auto;
         }
 
@@ -1334,7 +1340,9 @@ if ($cdark) {
             font-weight: normal;
         }
 
-        div#header-usermenu, div#seachbox, .mainmenu-container {
+        div#header-usermenu,
+        div#seachbox,
+        .mainmenu-container {
             display: none;
             visibility: hidden;
         }
@@ -1394,7 +1402,8 @@ if ($cdark) {
         }
 
         input.inputmedium,
-        textarea.areasmall, textarea.areamedium {
+        textarea.areasmall,
+        textarea.areamedium {
             width: auto;
             height: auto;
         }
