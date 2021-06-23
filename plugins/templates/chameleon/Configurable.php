@@ -2,10 +2,12 @@
 
 namespace SunlightTemplate\Chameleon;
 
+use Sunlight\Action\ActionResult;
 use Sunlight\Core;
 use Sunlight\Database\Database as DB;
 use Sunlight\Localization\LocalizationDirectory;
 use Sunlight\Plugin\Action\ConfigAction;
+use Sunlight\Plugin\Action\PluginAction;
 use Sunlight\Plugin\Plugin;
 use Sunlight\Plugin\PluginManager;
 use Sunlight\Plugin\TemplatePlugin;
@@ -19,9 +21,9 @@ use Sunlight\Util\Form;
 class Configurable extends TemplatePlugin
 {
 
-    const THEME_ID = 'chameleon';
+    public const THEME_ID = 'chameleon';
 
-    function __construct(array $data, PluginManager $manager)
+    public function __construct($data, PluginManager $manager)
     {
         // register lang for administration
         Core::$lang->registerSubDictionary(self::THEME_ID, new LocalizationDirectory(__DIR__ . DIRECTORY_SEPARATOR . 'Resources/languages/'));
@@ -29,16 +31,16 @@ class Configurable extends TemplatePlugin
     }
 
 
-    public function getPatternList()
+    public function getPatternList(): array
     {
         $list = __DIR__ . DIRECTORY_SEPARATOR . 'Resources/pattern_list.php';
         if (file_exists($list)) {
             return require $list;
         }
-        return array();
+        return [];
     }
 
-    public function getAction($name)
+    public function getAction(string $name): PluginAction
     {
         if ($name == 'config') {
             return new CustomConfig($this);
@@ -46,9 +48,9 @@ class Configurable extends TemplatePlugin
         return parent::getAction($name);
     }
 
-    protected function getConfigDefaults()
+    protected function getConfigDefaults(): array
     {
-        return array(
+        return [
             'menu_start' => 0,
             'menu_end' => 5,
             'active' => 0,
@@ -62,7 +64,7 @@ class Configurable extends TemplatePlugin
             'show_left_sidebar' => false,
             'show_right_sidebar' => true,
             'switch_sidebars' => false,
-        );
+        ];
     }
 }
 
@@ -71,29 +73,29 @@ class CustomConfig extends ConfigAction
     /** @var $plugin Configurable */
     protected $plugin;
 
-    function __construct(Plugin $plugin)
+    public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
         parent::__construct($plugin);
     }
 
-    protected function execute()
+    protected function execute(): ActionResult
     {
         // automatic increment cache (enforce reload css)
         if (!_debug && (isset($_POST['save']) || isset($_POST['reset']))) {
-            DB::update(_setting_table, "var=" . DB::val('cacheid'), array('val' => DB::raw('val+1')));
+            DB::update(_setting_table, "var=" . DB::val('cacheid'), ['val' => DB::raw('val+1')]);
         }
         return parent::execute();
     }
 
-    protected function getFields()
+    protected function getFields(): array
     {
         // patterns
         $pattern_list = $this->plugin->getPatternList();
         $total = count($pattern_list);
 
         // headers
-        $header_list = array();
+        $header_list = [];
         $loaded_headers = glob(__DIR__ . DIRECTORY_SEPARATOR . "images/headers/*.{jpg,png,bmp}", GLOB_BRACE);
 
         foreach ($loaded_headers as $file) {
@@ -102,7 +104,7 @@ class CustomConfig extends ConfigAction
         }
 
         // colors
-        $colors = array();
+        $colors = [];
         for ($c = 0; $c <= 10; ++$c) {
             $colors[_lang('admin.settings.admin.adminscheme.' . $c)] = $c;
         }
@@ -110,84 +112,84 @@ class CustomConfig extends ConfigAction
         // config instance
         $cfg = $this->plugin->getConfig();
 
-        return array(
+        return [
             // menu
-            'separator_menu' => array('label' => _lang(Configurable::THEME_ID . '.separator_menu'), 'input' => '', 'type' => ''),
-            'menu_start' => array(
+            'separator_menu' => ['label' => _lang(Configurable::THEME_ID . '.separator_menu'), 'input' => '', 'type' => ''],
+            'menu_start' => [
                 'label' => _lang(Configurable::THEME_ID . '.menu_start'),
                 'input' => '<input type="number" min="0" name="config[menu_start]" value="' . $cfg->offsetGet('menu_start') . '" class="inputmini">',
                 'type' => 'text'
-            ),
-            'menu_end' => array(
+            ],
+            'menu_end' => [
                 'label' => _lang(Configurable::THEME_ID . '.menu_end'),
                 'input' => '<input type="number" min="0" name="config[menu_end]" value="' . $cfg->offsetGet('menu_end') . '" class="inputmini">',
                 'type' => 'text'
-            ),
+            ],
 
             // theme
-            'separator_theme' => array('label' => _lang(Configurable::THEME_ID . '.separator_theme'), 'input' => '', 'type' => ''),
-            'active' => array(
+            'separator_theme' => ['label' => _lang(Configurable::THEME_ID . '.separator_theme'), 'input' => '', 'type' => ''],
+            'active' => [
                 'label' => _lang('admin.settings.admin.adminscheme'),
                 'input' => $this->createSelect('active', $colors, $cfg->offsetGet('active')),
                 'type' => 'text'
-            ),
-            'pattern' => array(
+            ],
+            'pattern' => [
                 'label' => _lang(Configurable::THEME_ID . '.pattern'),
                 'input' => $this->createPatternSelect('pattern', $pattern_list, $cfg->offsetGet('pattern')),
                 'type' => 'text'
-            ),
-            'pattern_counter' => array(
+            ],
+            'pattern_counter' => [
                 'label' => _lang(Configurable::THEME_ID . '.pattern_counter'),
                 'input' => '<input type="text" name="config[pattern_counter]" value="' . $total . '" class="inputmini" readonly>',
                 'type' => 'text'
-            ),
-            'header' => array(
+            ],
+            'header' => [
                 'label' => _lang(Configurable::THEME_ID . '.header'),
                 'input' => $this->createSelect('header', $header_list, $cfg->offsetGet('header')),
                 'type' => 'text'
-            ),
-            'dark_mode' => array(
+            ],
+            'dark_mode' => [
                 'label' => _lang(Configurable::THEME_ID . '.darkmode'),
                 'input' => '<input type="checkbox" name="config[dark_mode]" value="1"' . Form::activateCheckbox($cfg->offsetGet('dark_mode')) . '>',
                 'type' => 'checkbox'
-            ),
-            'rounded' => array(
+            ],
+            'rounded' => [
                 'label' => _lang(Configurable::THEME_ID . '.rounded'),
                 'input' => '<input type="checkbox" name="config[rounded]" value="1"' . Form::activateCheckbox($cfg->offsetGet('rounded')) . '>',
                 'type' => 'checkbox'
-            ),
-            'show_breadcrumbs' => array(
+            ],
+            'show_breadcrumbs' => [
                 'label' => _lang(Configurable::THEME_ID . '.show_breadcrumbs'),
                 'input' => '<input type="checkbox" name="config[show_breadcrumbs]" value="1"' . Form::activateCheckbox($cfg->offsetGet('show_breadcrumbs')) . '>',
                 'type' => 'checkbox'
-            ),
-            'random' => array(
+            ],
+            'random' => [
                 'label' => _lang(Configurable::THEME_ID . '.random'),
                 'input' => '<input type="checkbox" name="config[random]" value="1"' . Form::activateCheckbox($cfg->offsetGet('random')) . Form::disableInputUnless(_debug) . '>',
                 'type' => 'checkbox'
-            ),
+            ],
 
             // sidebars
-            'separator_sidebars' => array('label' => _lang(Configurable::THEME_ID . '.separator_sidebars'), 'input' => '', 'type' => ''),
-            'show_left_sidebar' => array(
+            'separator_sidebars' => ['label' => _lang(Configurable::THEME_ID . '.separator_sidebars'), 'input' => '', 'type' => ''],
+            'show_left_sidebar' => [
                 'label' => _lang(Configurable::THEME_ID . '.left.sidebar'),
                 'input' => '<input type="checkbox" name="config[show_left_sidebar]" value="1"' . Form::activateCheckbox($cfg->offsetGet('show_left_sidebar')) . '>',
                 'type' => 'checkbox'
-            ),
-            'show_right_sidebar' => array(
+            ],
+            'show_right_sidebar' => [
                 'label' => _lang(Configurable::THEME_ID . '.right.sidebar'),
                 'input' => '<input type="checkbox" name="config[show_right_sidebar]" value="1"' . Form::activateCheckbox($cfg->offsetGet('show_right_sidebar')) . '>',
                 'type' => 'checkbox'
-            ),
-            'switch_sidebars' => array(
+            ],
+            'switch_sidebars' => [
                 'label' => _lang(Configurable::THEME_ID . '.switch.sidebars'),
                 'input' => '<input type="checkbox" name="config[switch_sidebars]" value="1"' . Form::activateCheckbox($cfg->offsetGet('switch_sidebars')) . '>',
                 'type' => 'checkbox'
-            ),
-        );
+            ],
+        ];
     }
 
-    private function createSelect($name, $options, $default)
+    private function createSelect($name, $options, $default): string
     {
         $result = "<select name='config[" . $name . "]'>";
         foreach ($options as $k => $v) {
@@ -197,9 +199,9 @@ class CustomConfig extends ConfigAction
         return $result;
     }
 
-    private function createPatternSelect($name, $patterns, $default)
+    private function createPatternSelect($name, $patterns, $default): string
     {
-        $options = array();
+        $options = [];
         foreach ($patterns as $pattern) {
             $filename = pathinfo($pattern['file'], PATHINFO_FILENAME);
             $options[!$pattern['dark'] ? 'common' : 'dark'][] = "<option value='" . $filename . "'" . ($default == $filename ? " selected" : "") . ">" . (!empty($pattern['name']) ? $pattern['name'] : $filename) . "</option>\n";

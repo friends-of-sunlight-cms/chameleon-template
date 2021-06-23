@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
     'separator_menu' => '=== MENU ===',
     'menu_start' => 'Minimum order number',
     'menu_end' => 'Maximum order number',
@@ -18,4 +18,4 @@ return array(
     'left.sidebar' => 'Show left panel',
     'right.sidebar' => 'Show right panel',
     'switch.sidebars' => 'Switch side panels'
-);
+];

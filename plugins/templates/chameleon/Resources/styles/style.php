@@ -8,11 +8,11 @@ use Sunlight\Util\Math;
 
 // init core
 require '../../../../../system/bootstrap.php';
-Core::init('../../../../../', array(
+Core::init('../../../../../', [
     'env' => Core::ENV_WEB,
     'session_enabled' => false,
     'content_type' => 'text/css; charset=UTF-8',
-));
+]);
 
 // get template properties
 $template = Template::getCurrent();
@@ -53,7 +53,7 @@ if (!function_exists('_chameleon_color')) {
         $s = (isset($satc) ? ($sat_abs ? $satc : $GLOBALS['sat'] * $satc) : $GLOBALS['sat']);
 
         // vytvoreni hex kodu barvy
-        $color = new Color(array($h, $s, $l), 1);
+        $color = new Color([$h, $s, $l], 1);
 
         return $color->getRgbStr();
     }

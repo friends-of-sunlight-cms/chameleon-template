@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
     'separator_menu' => '=== MENU ===',
     'menu_start' => 'Minimální pořadové číslo',
     'menu_end' => 'Maximální pořadové číslo',
@@ -18,4 +18,4 @@ return array(
     'left.sidebar' => 'Zobrazit levý panel',
     'right.sidebar' => 'Zobrazit pravý panel',
     'switch.sidebars' => 'Vyměnit strany panelů'
-);
+];
