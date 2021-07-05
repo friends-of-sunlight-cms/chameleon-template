@@ -42,7 +42,7 @@ class Configurable extends TemplatePlugin
 
     public function getAction(string $name): PluginAction
     {
-        if ($name == 'config') {
+        if ($name === 'config') {
             return new CustomConfig($this);
         }
         return parent::getAction($name);
@@ -82,8 +82,8 @@ class CustomConfig extends ConfigAction
     protected function execute(): ActionResult
     {
         // automatic increment cache (enforce reload css)
-        if (!_debug && (isset($_POST['save']) || isset($_POST['reset']))) {
-            DB::update(_setting_table, "var=" . DB::val('cacheid'), ['val' => DB::raw('val+1')]);
+        if (!Core::$debug && (isset($_POST['save']) || isset($_POST['reset']))) {
+            DB::update('setting', "var=" . DB::val('cacheid'), ['val' => DB::raw('val+1')]);
         }
         return parent::execute();
     }

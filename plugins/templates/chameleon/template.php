@@ -3,7 +3,7 @@
 use Sunlight\Hcm;
 use Sunlight\Template;
 
-if (!defined('_root')) exit;
+if (!defined('SL_ROOT')) exit;
 
 $config = Template::getCurrent()->getConfig();
 

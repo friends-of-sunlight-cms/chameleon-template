@@ -1,4 +1,4 @@
-<?php if (defined('_root')) return [
+<?php if (defined('SL_ROOT')) return [
     [
         'file' => '1.png',
         'name' => 'Bubbles',
