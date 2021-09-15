@@ -21,7 +21,7 @@ $random = $config->offsetGet('random');
 $theme_path = $template->getWebPath() . '/';
 
 // don't cache in the debug
-header('Expires: ' . DateTime::formatForHttp((_debug || $random ? 1 : 2592000), true));
+header('Expires: ' . DateTime::formatForHttp((Core::$debug || $random ? 1 : 2592000), true));
 
 //prepare combination
 if ($random) {

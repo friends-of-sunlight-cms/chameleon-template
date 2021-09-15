@@ -165,7 +165,7 @@ class CustomConfig extends ConfigAction
             ],
             'random' => [
                 'label' => _lang(Configurable::THEME_ID . '.random'),
-                'input' => '<input type="checkbox" name="config[random]" value="1"' . Form::activateCheckbox($cfg->offsetGet('random')) . Form::disableInputUnless(_debug) . '>',
+                'input' => '<input type="checkbox" name="config[random]" value="1"' . Form::activateCheckbox($cfg->offsetGet('random')) . Form::disableInputUnless(Core::$debug) . '>',
                 'type' => 'checkbox'
             ],
 
