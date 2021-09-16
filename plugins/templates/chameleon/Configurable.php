@@ -114,7 +114,6 @@ class CustomConfig extends ConfigAction
 
         return [
             // menu
-            'separator_menu' => ['label' => _lang(Configurable::THEME_ID . '.separator_menu'), 'input' => '', 'type' => ''],
             'menu_start' => [
                 'label' => _lang(Configurable::THEME_ID . '.menu_start'),
                 'input' => '<input type="number" min="0" name="config[menu_start]" value="' . $cfg->offsetGet('menu_start') . '" class="inputmini">',
@@ -127,7 +126,6 @@ class CustomConfig extends ConfigAction
             ],
 
             // theme
-            'separator_theme' => ['label' => _lang(Configurable::THEME_ID . '.separator_theme'), 'input' => '', 'type' => ''],
             'active' => [
                 'label' => _lang('admin.settings.admin.adminscheme'),
                 'input' => $this->createSelect('active', $colors, $cfg->offsetGet('active')),
@@ -170,7 +168,6 @@ class CustomConfig extends ConfigAction
             ],
 
             // sidebars
-            'separator_sidebars' => ['label' => _lang(Configurable::THEME_ID . '.separator_sidebars'), 'input' => '', 'type' => ''],
             'show_left_sidebar' => [
                 'label' => _lang(Configurable::THEME_ID . '.left.sidebar'),
                 'input' => '<input type="checkbox" name="config[show_left_sidebar]" value="1"' . Form::activateCheckbox($cfg->offsetGet('show_left_sidebar')) . '>',
