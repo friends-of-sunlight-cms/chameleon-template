@@ -691,6 +691,8 @@ if ($cdark) {
     /* User */
     .avatar {
         border: 1px solid<?php echo $theme_smoke_med; ?>;
+        vertical-align: middle;
+        border-radius: 50%;
     }
 
     .profiletable .avatartd {
