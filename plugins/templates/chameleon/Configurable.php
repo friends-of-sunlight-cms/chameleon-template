@@ -56,7 +56,7 @@ class Configurable extends TemplatePlugin
             'active' => 0,
             'pattern' => 1,
             'pattern_counter' => 0,
-            'header' => 'header_bg1.png',
+            'header' => 'header_bg0.png',
             'dark_mode' => false,
             'show_breadcrumbs' => false,
             'rounded' => false,
