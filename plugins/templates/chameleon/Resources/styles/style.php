@@ -4,7 +4,6 @@ use Sunlight\Core;
 use Sunlight\Template;
 use Sunlight\Util\Color;
 use Sunlight\Util\DateTime;
-use Sunlight\Util\Math;
 
 // init core
 require '../../../../../system/bootstrap.php';
@@ -26,13 +25,13 @@ header('Expires: ' . DateTime::formatForHttp((Core::$debug || $random ? 1 : 2592
 //prepare combination
 if ($random) {
     $plist = $template->getPatternList();
-    $pattern = pathinfo($plist[Math::randomInt(1, $config->offsetGet('pattern_counter'))]['file'], PATHINFO_FILENAME);
+    $pattern = pathinfo($plist[random_int(1, $config->offsetGet('pattern_counter'))]['file'], PATHINFO_FILENAME);
 } else {
     $pattern = $config->offsetGet('pattern');
 }
 $header_bg = $config->offsetGet('header');
-$color_schema = ($random ? Math::randomInt(0, 10) : $config->offsetGet('active'));
-$GLOBALS['cdark'] = ($random ? (bool) Math::randomInt(0, 1) : $config->offsetGet('dark_mode'));
+$color_schema = ($random ? random_int(0, 10) : $config->offsetGet('active'));
+$GLOBALS['cdark'] = ($random ? (bool) random_int(0, 1) : $config->offsetGet('dark_mode'));
 
 global $hue, $sat, $cdark, $light;
 
