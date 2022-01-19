@@ -14,7 +14,7 @@ Core::init('../../../../../', [
 ]);
 
 // get template properties
-$template = Template::getCurrent();
+$template = Core::$pluginManager->getTemplate('chameleon');
 $config = $template->getConfig();
 $random = $config->offsetGet('random');
 $theme_path = $template->getWebPath() . '/';
