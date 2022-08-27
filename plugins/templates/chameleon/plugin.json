@@ -10,11 +10,11 @@
     "url": "https://github.com/friends-of-sunlight-cms/",
     "responsive": true,
     "css": [
-      "Resources/styles/regrid.css",
-      "Resources/styles/style.php"
+      "resources/styles/regrid.css",
+      "resources/styles/style.php"
     ],
     "js": [
-      "Resources/js/init.js"
+      "resources/js/init.js"
     ],
     "layouts": {
       "default": {

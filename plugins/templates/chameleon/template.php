@@ -96,4 +96,4 @@ if (!$config->offsetGet('show_left_sidebar') && !$config->offsetGet('show_right_
         </li>
     </ul>
 </div>
-<script src="<?= Template::getCurrent()->getWebPath(); ?>/Resources/js/menu.js"></script>
+<script src="<?= Template::getCurrent()->getWebPath(); ?>/resources/js/menu.js"></script>

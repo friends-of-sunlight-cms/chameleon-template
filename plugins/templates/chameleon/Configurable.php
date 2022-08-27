@@ -26,14 +26,14 @@ class Configurable extends TemplatePlugin
     public function __construct($data, PluginManager $manager)
     {
         // register lang for administration
-        Core::$dictionary->registerSubDictionary(self::THEME_ID, new LocalizationDirectory(__DIR__ . DIRECTORY_SEPARATOR . 'Resources/languages/'));
+        Core::$dictionary->registerSubDictionary(self::THEME_ID, new LocalizationDirectory(__DIR__ . DIRECTORY_SEPARATOR . 'resources/languages/'));
         parent::__construct($data, $manager);
     }
 
 
     public function getPatternList(): array
     {
-        $list = __DIR__ . DIRECTORY_SEPARATOR . 'Resources/pattern_list.php';
+        $list = __DIR__ . DIRECTORY_SEPARATOR . 'resources/pattern_list.php';
         if (file_exists($list)) {
             return require $list;
         }
