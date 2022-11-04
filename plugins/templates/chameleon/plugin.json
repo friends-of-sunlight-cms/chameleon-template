@@ -8,6 +8,7 @@
     },
     "class": "Configurable",
     "url": "https://github.com/friends-of-sunlight-cms/",
+    "author": "Friends of Sunlight CMS",
     "responsive": true,
     "css": [
       "resources/styles/regrid.css",
