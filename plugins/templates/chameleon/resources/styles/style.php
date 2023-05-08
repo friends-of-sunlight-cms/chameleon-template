@@ -16,7 +16,7 @@ Core::init('../../../../../', [
 // get template properties
 $template = Core::$pluginManager->getPlugins()->getTemplate('chameleon');
 $config = $template->getConfig();
-$random = $config->offsetGet('random');
+$random = $config['random'];
 $theme_path = $template->getWebPath() . '/';
 
 // don't cache in the debug
@@ -25,13 +25,13 @@ header('Expires: ' . DateTime::formatForHttp((Core::$debug || $random ? 1 : 2592
 //prepare combination
 if ($random) {
     $plist = $template->getPatternList();
-    $pattern = pathinfo($plist[random_int(1, $config->offsetGet('pattern_counter'))]['file'], PATHINFO_FILENAME);
+    $pattern = pathinfo($plist[random_int(1, $config['pattern_counter'])]['file'], PATHINFO_FILENAME);
 } else {
-    $pattern = $config->offsetGet('pattern');
+    $pattern = $config['pattern'];
 }
-$header_bg = $config->offsetGet('header');
-$color_schema = ($random ? random_int(0, 10) : $config->offsetGet('active'));
-$GLOBALS['cdark'] = ($random ? (bool) random_int(0, 1) : $config->offsetGet('dark_mode'));
+$header_bg = $config['header'];
+$color_schema = ($random ? random_int(0, 10) : $config['active']);
+$GLOBALS['cdark'] = ($random ? (bool) random_int(0, 1) : $config['dark_mode']);
 
 global $hue, $sat, $cdark, $light;
 
@@ -251,14 +251,14 @@ if ($cdark) {
     #wrapper.container {
         background-color: <?php echo $theme_white; ?>;
         border: 1px solid<?php echo $theme_smoke_med; ?>;
-        border-radius: <?php echo ($config->offsetGet('rounded') ? '10px' : '0px'); ?>;
+        border-radius: <?php echo ($config['rounded'] ? '10px' : '0px'); ?>;
         box-shadow: 0px 10px 25px -6px <?php echo $theme_alpha_shadow; ?>;
         margin: 10px auto;
     }
 
     .header-container {
-        border-top-right-radius: <?php echo ($config->offsetGet('rounded') ? '5px' : '0px'); ?>;
-        border-top-left-radius: <?php echo ($config->offsetGet('rounded') ? '5px' : '0px'); ?>;
+        border-top-right-radius: <?php echo ($config['rounded'] ? '5px' : '0px'); ?>;
+        border-top-left-radius: <?php echo ($config['rounded'] ? '5px' : '0px'); ?>;
         margin-top: 0.5rem;
         background-color: <?php echo $theme_lighter; ?>;
         background-image: url('<?php echo $theme_path; ?>images/headers/<?php echo $header_bg; ?>'), radial-gradient(circle, <?php echo $theme_bar; ?> 0%, <?php echo $theme_lighter; ?> 60%);

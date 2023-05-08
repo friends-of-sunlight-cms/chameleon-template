@@ -6,7 +6,7 @@
     "environment": {
         "system": "^8.0"
     },
-    "class": "Configurable",
+    "class": "TemplatePlugin",
     "url": "https://github.com/friends-of-sunlight-cms/",
     "author": "Friends of Sunlight CMS",
     "responsive": true,
