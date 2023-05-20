@@ -21,7 +21,9 @@ class ConfigAction extends BaseConfigAction
     {
         $this->plugin = $plugin;
         // register lang for administration
-        Core::$dictionary->registerSubDictionary(self::THEME_ID, new LocalizationDirectory(__DIR__ . DIRECTORY_SEPARATOR . 'resources/languages/'));
+        Core::$dictionary->registerSubDictionary(self::THEME_ID, new LocalizationDirectory(
+            __DIR__ . DIRECTORY_SEPARATOR . '../lang/'
+        ));
         parent::__construct($plugin);
     }
 
@@ -42,7 +44,7 @@ class ConfigAction extends BaseConfigAction
 
         // headers
         $header_list = [];
-        $loaded_headers = glob(__DIR__ . DIRECTORY_SEPARATOR . "images/headers/*.{jpg,png,bmp}", GLOB_BRACE);
+        $loaded_headers = glob(__DIR__ . DIRECTORY_SEPARATOR . "../images/headers/*.{jpg,png,bmp}", GLOB_BRACE);
 
         foreach ($loaded_headers as $file) {
             $info = pathinfo($file);

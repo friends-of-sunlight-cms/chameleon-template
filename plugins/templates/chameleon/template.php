@@ -93,4 +93,4 @@ if (!$config['show_left_sidebar'] && !$config['show_right_sidebar']) {
         </li>
     </ul>
 </div>
-<script src="<?= Template::getCurrent()->getWebPath(); ?>/resources/js/menu.js"></script>
+<script src="<?= Template::getCurrent()->getWebPath(); ?>/public/js/menu.js"></script>

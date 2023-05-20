@@ -14,7 +14,7 @@ class TemplatePlugin extends BaseTemplatePlugin
 {
     public function getPatternList(): array
     {
-        $list = __DIR__ . DIRECTORY_SEPARATOR . 'resources/pattern_list.php';
+        $list = __DIR__ . DIRECTORY_SEPARATOR . '../script/pattern_list.php';
         if (file_exists($list)) {
             return require $list;
         }

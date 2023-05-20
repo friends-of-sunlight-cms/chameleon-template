@@ -1,21 +1,22 @@
 {
     "$schema": "../../../system/schema/template.json",
-    "name": "ChameleonTheme",
+    "name": "Chameleon",
     "description": "Optionally adjustable theme",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "environment": {
         "system": "^8.0"
     },
     "class": "TemplatePlugin",
-    "url": "https://github.com/friends-of-sunlight-cms/",
-    "author": "Friends of Sunlight CMS",
+    "authors": [
+        {"name": "Friends of Sunlight CMS", "url": "https://github.com/friends-of-sunlight-cms/"}
+    ],
     "responsive": true,
     "css": [
-      "resources/styles/regrid.css",
-      "resources/styles/style.php"
+      "public/styles/regrid.css",
+      "public/styles/style.php"
     ],
     "js": [
-      "resources/js/init.js"
+      "public/js/init.js"
     ],
     "layouts": {
       "default": {
