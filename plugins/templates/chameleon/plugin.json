@@ -12,20 +12,20 @@
     ],
     "responsive": true,
     "css": [
-      "public/styles/regrid.css",
-      "public/styles/style.php"
+        "public/styles/regrid.css",
+        "public/styles/style.php"
     ],
     "js": [
-      "public/js/init.js"
+        "public/js/init.js"
     ],
     "layouts": {
-      "default": {
-        "template": "template.php",
-        "slots": [
-          "left",
-          "right"
-        ]
-      }
+        "default": {
+            "template": "template.php",
+            "slots": [
+                "left",
+                "right"
+            ]
+        }
     },
     "dark": false,
     "bbcode.buttons": true,
