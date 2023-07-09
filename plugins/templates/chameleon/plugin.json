@@ -6,10 +6,28 @@
     "environment": {
         "system": "^8.0"
     },
-    "class": "TemplatePlugin",
     "authors": [
         {"name": "Friends of Sunlight CMS", "url": "https://github.com/friends-of-sunlight-cms/"}
     ],
+    "class": "TemplatePlugin",
+    "config_defaults": {
+        "menu_start": 0,
+        "menu_end": 5,
+        "active": 0,
+        "pattern": 1,
+        "pattern_counter": 50,
+        "header": "header_bg0.png",
+        "dark_mode": false,
+        "rounded": false,
+        "show_breadcrumbs": false,
+        "random": true,
+        "show_left_sidebar": false,
+        "show_right_sidebar": true,
+        "switch_sidebars": false
+    },
+    "actions": {
+        "config": "ConfigAction"
+    },
     "responsive": true,
     "css": [
         "public/styles/regrid.css",
