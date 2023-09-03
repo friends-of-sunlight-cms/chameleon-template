@@ -38,7 +38,7 @@ if (!$config['show_left_sidebar'] && !$config['show_right_sidebar']) {
             <div id="header" class="row">
                 <div id="logo" class="xs-ten sm-ten md-eight column">
                     <div class="site-name">
-                        <a href="<?= Template::siteUrl(); ?>"><?= Template::siteTitle(); ?></a>
+                        <a href="<?= _e(Template::sitePath()); ?>"><?= Template::siteTitle(); ?></a>
                     </div>
                     <span class="site-description"><?= Template::siteDescription(); ?></span>
                 </div>
