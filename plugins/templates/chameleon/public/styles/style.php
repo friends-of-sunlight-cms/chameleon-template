@@ -1,13 +1,15 @@
 <?php
 
 use Sunlight\Core;
+use Sunlight\Router;
 use Sunlight\Template;
 use Sunlight\Util\Color;
 use Sunlight\Util\DateTime;
+use SunlightTemplate\Chameleon\ColorSchemaGenerator;
 
 // init core
 require '../../../../../system/bootstrap.php';
-Core::init('../../../../../', [
+Core::init([
     'env' => Core::ENV_WEB,
     'session_enabled' => false,
     'content_type' => 'text/css; charset=UTF-8',
@@ -17,7 +19,6 @@ Core::init('../../../../../', [
 $template = Core::$pluginManager->getPlugins()->getTemplate('chameleon');
 $config = $template->getConfig();
 $random = $config['random'];
-$theme_path = $template->getWebPath() . '/';
 
 // don't cache in the debug
 header('Expires: ' . DateTime::formatForHttp((Core::$debug || $random ? 1 : 2592000), true));
@@ -25,212 +26,20 @@ header('Expires: ' . DateTime::formatForHttp((Core::$debug || $random ? 1 : 2592
 //prepare combination
 if ($random) {
     $plist = $template->getPatternList();
-    $pattern = pathinfo($plist[random_int(1, $config['pattern_counter'])]['file'], PATHINFO_FILENAME);
+    $pattern = pathinfo($plist[random_int(1, ($config['pattern_counter'] - 1))]['file'], PATHINFO_FILENAME);
 } else {
     $pattern = $config['pattern'];
 }
-$header_bg = $config['header'];
-$color_schema = ($random ? random_int(0, 10) : $config['active']);
-$GLOBALS['cdark'] = ($random ? (bool) random_int(0, 1) : $config['dark_mode']);
 
-global $hue, $sat, $cdark, $light;
+$header_bg = !empty($config['header_custom'])
+    ? Router::path($config['header_custom'], ['absolute' => false])
+    : $template->getAssetPath('images/headers/' . $config['header']);
 
-if (!function_exists('_chameleon_color')) {
-    function _chameleon_color($loff = 0, $satc = null, $sat_abs = false, $light_abs = false)
-    {
-        // nacteni a uprava barev
-        if ($satc === 0) {
-            $light_abs = true;
-            $loff += 127;
-        }
-        $h = $GLOBALS['hue'];
-        if ($GLOBALS['cdark']) {
-            $l = ($light_abs ? 255 - $loff : $GLOBALS['light'] - $loff);
-        } else {
-            $l = ($light_abs ? $loff : $GLOBALS['light'] + $loff);
-        }
-        $s = (isset($satc) ? ($sat_abs ? $satc : $GLOBALS['sat'] * $satc) : $GLOBALS['sat']);
-
-        // vytvoreni hex kodu barvy
-        $color = new Color([$h, $s, $l], 1);
-
-        return $color->getRgbStr();
-    }
-}
-
-// vychozi HSL hodnoty
-$hue = 0;
-$light = 127;
-$sat = 255;
-
-// vychozi barevne hodnoty
-$theme_link = null;
-$theme_bar_text = null;
-$theme_bar_shadow = null;
-$theme_bar_flip = false;
-if ($cdark) {
-    $theme_white = '#000';
-    $theme_black = '#fff';
-    $theme_bg_info = '#00626A';
-    $theme_bg_alert = '#845100';
-    $theme_bg_danger = '#840000';
-} else {
-    $theme_white = '#fff';
-    $theme_black = '#000';
-    $theme_bg_info = '#D0EDEE';
-    $theme_bg_alert = '#FFD183';
-    $theme_bg_danger = '#FFA7A7';
-}
-$theme_bar_loff = 30;
-$theme_text = $theme_black;
-if ($cdark) {
-    $theme_contrast = $theme_black;
-    $theme_contrast2 = $theme_white;
-} else {
-    $theme_contrast = $theme_white;
-    $theme_contrast2 = $theme_black;
-}
-$theme_link_loff = ($cdark ? -20 : -10);
-$dark_suffix = ($cdark ? '_dark' : '');
-
-// uprava podle schematu
-switch ($color_schema) {
-    // modry
-    case 1:
-        $hue = 145;
-        $sat -= 10;
-        break;
-
-    // zeleny
-    case 2:
-        $hue = 70;
-        if (!$cdark) {
-            $light -= 20;
-        }
-        $sat *= 0.7;
-        break;
-
-    // cerveny
-    case 3:
-        $hue = 5;
-        if (!$cdark) {
-            $light -= 10;
-        }
-        break;
-
-    // zluty
-    case 4:
-        $hue = 35;
-        $theme_contrast = $theme_black;
-        $theme_link = '#BE9B02';
-        if (!$cdark) {
-            $light -= 20;
-            $theme_bar_flip = true;
-        } else {
-            $light += 5;
-        }
-        break;
-
-    // purpurovy
-    case 5:
-        $hue = 205;
-        break;
-
-    // azurovy
-    case 6:
-        $hue = 128;
-        if (!$cdark) {
-            $light -= 10;
-            $sat -= 70;
-            $theme_link_loff -= 10;
-            $theme_bar_flip = true;
-        }
-        break;
-
-    // fialovy
-    case 7:
-        $hue = 195;
-        if ($cdark) {
-            $light += 10;
-        }
-        break;
-
-    // hnedy
-    case 8:
-        $hue = 20;
-        $light -= 10;
-        $sat *= 0.6;
-        break;
-
-    // tmave modry
-    case 9:
-        $hue = 170;
-        if (!$cdark) {
-        } else {
-            $theme_link_loff -= 20;
-        }
-        $sat *= 0.5;
-        break;
-
-    // sedy
-    case 10:
-        $hue = 150;
-        $sat = 0;
-        $theme_link = '#67939F';
-        $theme_bar_loff = 50;
-        if (!$cdark) {
-            $theme_bar_flip = true;
-        }
-        break;
-
-    // oranzovy
-    default:
-        $hue = 14;
-        $theme_link = '#F84A00';
-        $light -= 10;
-        break;
-}
-
-// vypocet barev
-$theme = _chameleon_color(($cdark ? 40 : 0));
-$theme_lighter = _chameleon_color(80);
-$theme_lightest = _chameleon_color(100);
-$theme_smoke = _chameleon_color(115, 0);
-$theme_smoke_text = _chameleon_color($light * 0.2, 0);
-$theme_smoke_text_dark = _chameleon_color(10, 0);
-$theme_smoke_text_darker = _chameleon_color(-30, 0);
-$theme_smoke = _chameleon_color(110, 0);
-$theme_smoke_med = _chameleon_color(90, 0);
-$theme_smoke_dark = _chameleon_color(60, 0);
-$theme_smoke_darker = _chameleon_color($cdark ? -20 : -10, 0);
-$theme_smoke_light = _chameleon_color(110, 0);
-$theme_smoke_lighter = _chameleon_color(118, 0);
-$theme_smoke_lightest = _chameleon_color(125, 0);
-$theme_smoke_lightest_colored = _chameleon_color(125);
-$theme_med = _chameleon_color(30);
-$theme_dark = _chameleon_color(-10);
-$theme_bar = _chameleon_color($theme_bar_loff);
-
-if ($theme_link == null) {
-    $theme_link = _chameleon_color($theme_link_loff, 255, true);
-}
-if ($theme_bar_shadow === null) {
-    $theme_bar_shadow = ($theme_bar_flip ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)');
-}
-if ($cdark) {
-    $theme_bar_flip = !$theme_bar_flip;
-}
-if ($theme_bar_text === null) {
-    $theme_bar_text = ($theme_bar_flip ? $theme_black : $theme_white);
-}
-if ($cdark) {
-    $theme_alpha_shadow = 'rgba(255, 255, 255, 0.15)';
-    $theme_alpha_shadow2 = 'rgba(255, 255, 255, 0.075)';
-} else {
-    $theme_alpha_shadow = 'rgba(0, 0, 0, 0.15)';
-    $theme_alpha_shadow2 = 'rgba(0, 0, 0, 0.075)';
-}
-
+$colorSchemaGen = new ColorSchemaGenerator(
+    ($random ? random_int(0, 10) : $config['active']), // color scheme
+    ($random ? (bool)random_int(0, 1) : $config['dark_mode']) // dark
+);
+$colorMap = $colorSchemaGen->getColorMap();
 ?>
 /*
 <style>
@@ -240,28 +49,30 @@ if ($cdark) {
     }
 
     body {
-        color: <?php echo $theme_text; ?>;
-        margin: 0px;
-        padding: 0px;
-        background: <?php echo $theme_lightest; ?> url('<?php echo $theme_path; ?>images/patterns/<?php echo $pattern; ?>.png') repeat;
+        color: <?= $colorMap['theme_text']; ?>;
+        background: <?= $colorMap['theme_lightest']; ?> url('<?= $template->getAssetPath('images/patterns/' . $pattern . '.png') ?>') repeat;
         background-attachment: fixed;
         font-family: 'Source Sans Pro', sans-serif;
     }
 
-    #wrapper.container {
-        background-color: <?php echo $theme_white; ?>;
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
-        border-radius: <?php echo ($config['rounded'] ? '10px' : '0px'); ?>;
-        box-shadow: 0px 10px 25px -6px <?php echo $theme_alpha_shadow; ?>;
-        margin: 10px auto;
+    .wrapper {
+        box-sizing: border-box;
+        max-width: 1200px;
     }
 
-    .header-container {
-        border-top-right-radius: <?php echo ($config['rounded'] ? '5px' : '0px'); ?>;
-        border-top-left-radius: <?php echo ($config['rounded'] ? '5px' : '0px'); ?>;
-        margin-top: 0.5rem;
-        background-color: <?php echo $theme_lighter; ?>;
-        background-image: url('<?php echo $theme_path; ?>images/headers/<?php echo $header_bg; ?>'), radial-gradient(circle, <?php echo $theme_bar; ?> 0%, <?php echo $theme_lighter; ?> 60%);
+    section#page {
+        padding: 15px 0 40px 0;
+        background-color: <?= $colorMap['theme_white']; ?>;
+        border-bottom-right-radius: <?= ($config['rounded'] ? '10px' : '0px'); ?>;
+        border-bottom-left-radius: <?= ($config['rounded'] ? '10px' : '0px'); ?>;
+        box-shadow: 0px 10px 25px -6px<?= $colorMap['theme_alpha_shadow']; ?>;
+    }
+
+    header {
+        border-top-right-radius: <?= ($config['rounded'] ? '10px' : '0px'); ?>;
+        border-top-left-radius: <?= ($config['rounded'] ? '10px' : '0px'); ?>;
+        background-color: <?= $colorMap['theme_lighter']; ?>;
+        background-image: url('<?= $header_bg; ?>'), radial-gradient(circle, <?= $colorMap['theme_bar']; ?> 0%, <?= $colorMap['theme_lighter']; ?> 60%);
         background-repeat: no-repeat;
         background-position: top center;
         background-size: cover;
@@ -271,9 +82,7 @@ if ($cdark) {
         -webkit-background-size: cover;
     }
 
-    h1,
-    h2,
-    h3 {
+    h1, h2, h3 {
         margin: 0;
         padding: 0;
         font-weight: 300;
@@ -288,20 +97,22 @@ if ($cdark) {
     }
 
     a {
-        color: <?php echo $theme_link; ?>;
+        color: <?= $colorMap['theme_link']; ?>;
     }
 
-    #header {
-        height: 140px;
+    #header-usermenu a {
+        color: <?= $colorMap['theme_bar_text']; ?>;
     }
 
     #header-usermenu ul {
         float: right;
-        margin: 0px -10px 0px 0px;
+        margin: 0;
         padding: 2px 20px;
         list-style: none;
         line-height: normal;
-        background-color: rgba(0, 0, 0, 0.5);
+        min-width: 35%;
+        text-align: right;
+        background: <?= $colorMap['theme_bar_gradient']; ?>;
     }
 
     #header-usermenu li {
@@ -309,7 +120,7 @@ if ($cdark) {
     }
 
     #header-usermenu li:not(:last-child):after {
-        color: <?php echo $theme_smoke_med; ?>;
+        color: <?= $colorMap['theme_smoke_med']; ?>;
         content: " | ";
     }
 
@@ -323,30 +134,34 @@ if ($cdark) {
     }
 
     #logo div.site-name a {
-        color: <?php echo $theme_link; ?>;
+        color: <?= $colorMap['theme_link']; ?>;
         text-decoration: none;
-        text-shadow: 0px 0px 5px<?php echo $theme_white; ?>;
+        text-shadow: 0px 0px 5px<?= $colorMap['theme_white']; ?>;
     }
 
     span.site-description {
+        margin: 0 0 0 0.3rem;
         font-weight: bold;
-        text-shadow: 0px 0px 5px<?php echo $theme_white; ?>;
+        text-shadow: 0px 0px 5px<?= $colorMap['theme_white']; ?>;
     }
 
     div#seachbox {
         padding-top: 50px;
-        text-align: right;
+        text-align: center;
     }
 
     #page {
-        /*padding-top: 2rem;*/
         padding-bottom: 100px;
     }
 
     #menu {
         overflow: hidden;
-        background: <?php echo $theme_bar; ?>;
-        margin-bottom: 1rem;
+        background: <?= $colorMap['theme_bar']; ?>;
+        /*margin-bottom: 1rem;*/
+    }
+
+    #content {
+        margin: 0.3rem 0.5rem;
     }
 
     #menu ul {
@@ -362,20 +177,20 @@ if ($cdark) {
 
     #menu a {
         display: block;
-        padding: 0px 10px 0px 10px;
+        padding: 0px 10px;
         line-height: 45px;
         text-decoration: none;
         text-transform: uppercase;
         text-align: center;
         font-size: 1rem;
         font-weight: 200;
-        color: <?php echo $theme_bar_text; ?>;
+        color: <?= $colorMap['theme_bar_text']; ?>;
         border: none;
     }
 
     #menu li.active a {
         text-decoration: underline;
-        color: <?php echo $theme_black; ?>;
+        color: <?= $colorMap['theme_black']; ?>;
         font-weight: bold;
     }
 
@@ -383,51 +198,44 @@ if ($cdark) {
         text-decoration: underline;
     }
 
-    #menu li.active a {}
+    #menu li.active a {
+    }
 
     #menu .last {
         border-right: none;
     }
 
-    #breadcrumbs {
+    ul.breadcrumbs {
         font-size: 0.75rem;
-        margin-bottom: 0.3rem;
-        color: <?php echo $theme_smoke_text; ?>;
-    }
-
-    #breadcrumbs span {
-        font-weight: bold;
-    }
-
-    #breadcrumbs ul.breadcrumbs {
-        display: inline;
-        padding: 0;
+        padding: 0 0 5px 5px;
         margin: 0;
+        color: <?= $colorMap['theme_smoke_text']; ?>;
+        list-style-type: none;
     }
 
-    #breadcrumbs ul.breadcrumbs li {
+    ul.breadcrumbs li {
         display: inline;
     }
 
-    #breadcrumbs ul.breadcrumbs li a {
+    ul.breadcrumbs li a {
         text-decoration: none;
         margin: 0 3px;
     }
 
-    #breadcrumbs ul.breadcrumbs li a:hover {
+    ul.breadcrumbs li a:hover {
         text-decoration: underline;
     }
 
-    #breadcrumbs ul.breadcrumbs li:last-child a {
-        color: inherit;
+    ul.breadcrumbs li:last-child a {
+        /*color: inherit;*/
+        color: <?= $colorMap['theme_smoke_text_darker']; ?>;
         text-decoration: none;
     }
 
-    #breadcrumbs ul.breadcrumbs li:not(:last-child):after {
+    ul.breadcrumbs li:not(:last-child):after {
         content: " >";
-        color: <?php echo $theme_smoke_text; ?>;
+        color: <?= $colorMap['theme_smoke_text']; ?>;
     }
-
 
     #footer {
         text-align: center;
@@ -440,7 +248,7 @@ if ($cdark) {
 
     #footer li:not(:last-child):after {
         content: " \2022 ";
-        color: <?php echo $theme_smoke_text; ?>;
+        color: <?= $colorMap['theme_smoke_text']; ?>;
     }
 
     /*=========================================================*/
@@ -448,10 +256,6 @@ if ($cdark) {
     ul.boxes {
         padding: 0;
         margin: 0;
-    }
-
-    ul.boxes li:last-child {
-        margin-bottom: 20px;
     }
 
     ul.boxes li {
@@ -464,8 +268,8 @@ if ($cdark) {
 
     .box-title {
         padding: 0.5em;
-        background: <?php echo $theme_bar; ?>;
-        color: <?php echo $theme_white; ?>;
+        background: <?= $colorMap['theme_bar']; ?>;
+        color: <?= $colorMap['theme_white']; ?>;
         margin: 10px 0;
     }
 
@@ -492,7 +296,7 @@ if ($cdark) {
     }
 
     .widetable {
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
     }
 
     .widetable td {
@@ -508,7 +312,7 @@ if ($cdark) {
     fieldset {
         margin: 1em 0;
         padding: 8px;
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
     }
 
     legend {
@@ -542,7 +346,7 @@ if ($cdark) {
     }
 
     legend {
-        color: <?php echo $theme_black; ?>;
+        color: <?= $colorMap['theme_black']; ?>;
         font-weight: bold;
     }
 
@@ -594,7 +398,7 @@ if ($cdark) {
     }
 
     .list-perex-image {
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         float: left;
         margin: 6px 6px 6px 0;
         max-width: 96px;
@@ -607,7 +411,7 @@ if ($cdark) {
         list-style-type: none;
         font-size: 0.9rem;
         font-style: italic;
-        color: <?php echo $theme_smoke_text; ?>
+        color: <?= $colorMap['theme_smoke_text']; ?>
     }
 
     ul.list-info li {
@@ -625,7 +429,7 @@ if ($cdark) {
     }
 
     ul.list-info a {
-        color: <?php echo $theme_smoke_text; ?>;
+        color: <?= $colorMap['theme_smoke_text']; ?>;
         text-decoration: none;
     }
 
@@ -635,7 +439,7 @@ if ($cdark) {
 
     /* Article */
     .article-navigation {
-        border-bottom: 1px solid<?php echo $theme_smoke_med; ?>;
+        border-bottom: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         margin-bottom: 15px;
         padding-bottom: 10px;
     }
@@ -646,19 +450,19 @@ if ($cdark) {
     }
 
     .article-perex-image {
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         float: right;
         margin: 0 8px 8px;
         max-width: 150px;
     }
 
     .article-footer {
-        color: <?php echo $theme_smoke_text; ?>;
+        color: <?= $colorMap['theme_smoke_text']; ?>;
         width: 100%;
     }
 
     .article-footer a {
-        color: <?php echo $theme_smoke_text; ?>;
+        color: <?= $colorMap['theme_smoke_text']; ?>;
         text-decoration: none;
     }
 
@@ -674,7 +478,7 @@ if ($cdark) {
     }
 
     .article-rating {
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         padding: 5px;
     }
 
@@ -690,7 +494,7 @@ if ($cdark) {
 
     /* User */
     .avatar {
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         vertical-align: middle;
         border-radius: 50%;
     }
@@ -720,7 +524,7 @@ if ($cdark) {
     }
 
     .messages-table {
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         width: 100%
     }
 
@@ -741,7 +545,7 @@ if ($cdark) {
     .posts {
         margin-top: 20px;
         padding-top: 10px;
-        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
+        border-top: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
     }
 
     .posts-pm {
@@ -756,17 +560,16 @@ if ($cdark) {
         padding-bottom: 10px;
     }
 
-    .posts-form-buttons>span {
+    .posts-form-buttons > span {
         margin-left: 10px;
     }
 
-    .posts-form-buttons>span:first-child {
+    .posts-form-buttons > span:first-child {
         margin-left: 0;
     }
 
     .posts-form-buttons a.bbcode-button {
-        background: url("<?php echo $theme_path; ?>images/bbcode/button-body.png") left top no-repeat;
-        /*display: inline-block;*/
+        background: url("<?= $template->getAssetPath('images/bbcode/button-body.png') ?>") left top no-repeat;
         height: 16px;
         padding: 6px 4px;
         width: 16px;
@@ -781,7 +584,7 @@ if ($cdark) {
     }
 
     .post-list {
-        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
+        border-top: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
     }
 
     .post {
@@ -795,16 +598,16 @@ if ($cdark) {
     }
 
     .post-author-guest {
-        color: <?php echo $theme_smoke_text; ?>;
+        color: <?= $colorMap['theme_smoke_text']; ?>;
     }
 
     .post-info {
-        color: <?php echo $theme_smoke_text; ?>;
+        color: <?= $colorMap['theme_smoke_text']; ?>;
         font-size: 0.75rem;
     }
 
     .post-postlink {
-        color: <?php echo $theme_link; ?>;
+        color: <?= $colorMap['theme_link']; ?>;
         float: right;
         font-size: 0.75rem;
         position: relative;
@@ -812,7 +615,8 @@ if ($cdark) {
         text-decoration: none;
     }
 
-    .post-actions {}
+    .post-actions {
+    }
 
     .post-actions a {
         font-size: 0.75rem;
@@ -841,7 +645,7 @@ if ($cdark) {
     .post-body {
         margin: 0;
         padding: 8px 0;
-        border-bottom: 1px solid<?php echo $theme_smoke_med; ?>;
+        border-bottom: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
     }
 
     .post-body-text {
@@ -871,11 +675,11 @@ if ($cdark) {
 
     /* Topic list */
     .topic-table thead th {
-        background-color: <?php echo $theme_smoke; ?>;
+        background-color: <?= $colorMap['theme_smoke']; ?>;
     }
 
     .topic-table tr:hover {
-        background-color: <?php echo $theme_lightest; ?>;
+        background-color: <?= $colorMap['theme_lightest']; ?>;
     }
 
     .topic-icon-cell {
@@ -895,8 +699,8 @@ if ($cdark) {
     }
 
     .topic-pages a {
-        background-color: <?php echo $theme_smoke_lightest; ?>;
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        background-color: <?= $colorMap['theme_smoke_lightest']; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         display: inline-block;
         margin: 0 2px;
         padding: 0 4px;
@@ -908,16 +712,16 @@ if ($cdark) {
     }
 
     .topic-table tr.topic-hl td {
-        background-color: <?php echo $theme_smoke; ?>;
+        background-color: <?= $colorMap['theme_smoke']; ?>;
     }
 
     .topic-table tr td {
-        background-color: <?php echo $theme_smoke_lightest; ?>;
+        background-color: <?= $colorMap['theme_smoke_lightest']; ?>;
     }
 
     .topic-table td,
     .topic-table th {
-        border: 1px solid<?php echo $theme_white; ?>;
+        border: 1px solid<?= $colorMap['theme_white']; ?>;
         padding: 5px;
     }
 
@@ -938,8 +742,8 @@ if ($cdark) {
     .poll,
     .sbox {
         margin: 1em 0;
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
-        background-color: <?php echo $theme_smoke_lightest; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
+        background-color: <?= $colorMap['theme_smoke_lightest']; ?>;
     }
 
     .poll {
@@ -947,7 +751,7 @@ if ($cdark) {
     }
 
     .poll-answer {
-        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
+        border-top: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         padding: 6px 0 5px;
     }
 
@@ -956,7 +760,7 @@ if ($cdark) {
     }
 
     .poll-answer div {
-        background: url("<?php echo $theme_path; ?>images/system/votebar.gif") repeat-x;
+        background: url("<?= $template->getAssetPath('images/system/votebar.gif') ?>") repeat-x;
         height: 11px;
         margin: 6px 2px 4px 0;
     }
@@ -997,7 +801,7 @@ if ($cdark) {
     }
 
     .sbox-item {
-        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
+        border-top: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         padding: 10px 5px 10px 0;
     }
 
@@ -1013,12 +817,12 @@ if ($cdark) {
     }
 
     .gallery img {
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         margin: 3px;
     }
 
     .gallery td {
-        background-color: <?php echo $theme_lightest; ?>;
+        background-color: <?= $colorMap['theme_lightest']; ?>;
         overflow: hidden;
         text-align: center;
         vertical-align: middle;
@@ -1036,8 +840,8 @@ if ($cdark) {
 
     .paging a {
         padding: 0.2em 0.6em;
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
-        background-color: <?php echo $theme_smoke_lightest; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
+        background-color: <?= $colorMap['theme_smoke_lightest']; ?>;
         text-decoration: none;
     }
 
@@ -1048,7 +852,7 @@ if ($cdark) {
 
     /* Security image (captcha) */
     .cimage {
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         height: 41px;
         margin-left: 5px;
         vertical-align: top;
@@ -1067,7 +871,7 @@ if ($cdark) {
     .message {
         color: #000;
         background: #fff no-repeat 5px 5px;
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
         font-weight: bold;
         line-height: 120%;
         margin: 1em 0;
@@ -1075,15 +879,15 @@ if ($cdark) {
     }
 
     .message-ok {
-        background-image: url("<?php echo $theme_path; ?>images/icons/info.png");
+        background-image: url("<?= $template->getAssetPath('images/icons/info.png') ?>");
     }
 
     .message-warn {
-        background-image: url("<?php echo $theme_path; ?>images/icons/warning.png");
+        background-image: url("<?= $template->getAssetPath('images/icons/warning.png') ?>");
     }
 
     .message-err {
-        background-image: url("<?php echo $theme_path; ?>images/icons/error.png");
+        background-image: url("<?= $template->getAssetPath('images/icons/error.png') ?>");
     }
 
     .message ul {
@@ -1096,7 +900,7 @@ if ($cdark) {
         display: block;
         height: 10px;
         margin-top: 10px;
-        border-top: 1px solid<?php echo $theme_smoke_med; ?>;
+        border-top: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
     }
 
     .hr hr {
@@ -1122,10 +926,10 @@ if ($cdark) {
         display: inline-block;
         margin: 0;
         padding: 6px;
-        border: 1px solid<?php echo $theme_smoke_med; ?>;
-        background: <?php echo $theme_smoke_lighter; ?>;
-        background: linear-gradient(to bottom, <?php echo $theme_smoke_lightest; ?>, <?php echo $theme_smoke; ?>);
-        color: <?php echo $theme_text; ?>;
+        border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
+        background: <?= $colorMap['theme_smoke_lighter']; ?>;
+        background: linear-gradient(to bottom, <?= $colorMap['theme_smoke_lightest']; ?>, <?= $colorMap['theme_smoke']; ?>);
+        color: <?= $colorMap['theme_text']; ?>;
         vertical-align: middle;
         font-weight: normal;
         font-size: 0.8rem;
@@ -1144,9 +948,9 @@ if ($cdark) {
     button:hover,
     input[type=submit]:hover,
     input[type=reset]:hover {
-        background: <?php echo $theme_lightest; ?>;
-        background: linear-gradient(to bottom, <?php echo $theme_lightest; ?>, <?php echo $theme_lighter; ?>);
-        border-color: <?php echo $theme_lighter; ?>;
+        background: <?= $colorMap['theme_lightest']; ?>;
+        background: linear-gradient(to bottom, <?= $colorMap['theme_lightest']; ?>, <?= $colorMap['theme_lighter']; ?>);
+        border-color: <?= $colorMap['theme_lighter']; ?>;
         cursor: pointer;
     }
 
@@ -1170,14 +974,14 @@ if ($cdark) {
     }
 
     .hint {
-        color: <?php echo $theme_smoke_med; ?>;
+        color: <?= $colorMap['theme_smoke_med']; ?>;
         font-size: 0.625rem;
         padding: 0 4px;
     }
 
     .bborder {
         padding-bottom: 0.8em;
-        border-bottom: 1px solid<?php echo $theme_smoke_med; ?>;
+        border-bottom: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
     }
 
     .wlimiter {
@@ -1216,22 +1020,24 @@ if ($cdark) {
     .hamburger-icon {
         font-size: 30px;
         cursor: pointer;
-        margin: 20px;
     }
 
     .sidenav {
-        border: 1px solid #ededed;
+        /*border: 1px solid #ededed;*/
         height: 100%;
         width: 0;
         position: fixed;
         z-index: 10;
         top: 0;
         left: 0;
-        background-color: <?php echo $theme_white; ?>;
+        background-color: #1c1c1c;
         overflow-x: hidden;
-        /*transition: 0.5s;*/
         padding-top: 35px;
         visibility: hidden;
+    }
+
+    .sidenav .hr {
+        border-top: 1px solid #000;
     }
 
     .sidenav.visible {
@@ -1263,7 +1069,7 @@ if ($cdark) {
         right: 25px;
         font-size: 3rem;
         margin-left: 50px;
-        color: <?php echo $theme_black; ?>;
+        color: <?= $colorMap['theme_bar']; ?>;
         text-decoration: none;
         padding-top: 4px;
     }
@@ -1274,12 +1080,12 @@ if ($cdark) {
         padding: 5px 5px 5px 10px;
         text-decoration: underline;
         background: none;
-        color: <?php echo $theme_link; ?>;
+        color: <?= $colorMap['theme_bar']; ?>;
         display: block;
     }
 
     .sidenav ul li a:hover {
-        color: <?php echo $theme_link; ?>;
+        color: <?= $colorMap['theme_bar']; ?>;
     }
 
     @media screen and (max-height: 450px) {
@@ -1296,27 +1102,31 @@ if ($cdark) {
 
     .mobile-nav {
         display: none;
-        text-align: right;
     }
 
     /* === Tweak responsivity === */
     @media (max-width: 425px) {
         body {
             background: none;
-        }
-
-        #wrapper.container {
-            background-color: <?php echo $theme_white; ?>;
-            border: 1px solid<?php echo $theme_smoke_med; ?>;
-            border-radius: 0;
-            box-shadow: none;
             margin: 0;
         }
 
-        .header-container {
+        .wrapper {
+            background-color: <?= $colorMap['theme_white']; ?>;
+            border: 1px solid<?= $colorMap['theme_smoke_med']; ?>;
+            border-radius: 0;
+            box-shadow: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #hamburger-menu {
+            margin: 10px;
+        }
+
+        header {
             border-radius: 0;
             margin-top: 0;
-            background: none;
         }
 
         .mobile-nav {
@@ -1325,25 +1135,25 @@ if ($cdark) {
 
         #logo {
             height: 130px;
-            padding: 20px 0px 0px 10px;
+            padding: 10px;
         }
 
-        #header,
+        header,
         #logo {
             height: auto;
         }
 
         #logo div.site-name {
-            font-size: 1rem;
+            font-size: 2rem;
+            margin: 0 0 0 0.5rem;
         }
 
         span.site-description {
-            font-weight: normal;
+            display: none;
         }
 
         div#header-usermenu,
-        div#seachbox,
-        .mainmenu-container {
+        div#seachbox {
             display: none;
             visibility: hidden;
         }

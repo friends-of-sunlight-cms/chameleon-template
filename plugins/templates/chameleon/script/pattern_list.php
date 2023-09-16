@@ -183,72 +183,72 @@
     // ideal for dark theme
     // =================
     [
-        'file' => 'd1.png',
+        'file' => '37.png',
         'name' => 'Night sky',
         'dark' => true,
     ],
     [
-        'file' => 'd2.png',
+        'file' => '38.png',
         'name' => 'Bricks 2',
         'dark' => true,
     ],
     [
-        'file' => 'd3.png',
+        'file' => '39.png',
         'name' => 'Scratched 2',
         'dark' => true,
     ],
     [
-        'file' => 'd4.png',
+        'file' => '40.png',
         'name' => 'Hard wall',
         'dark' => true,
     ],
     [
-        'file' => 'd5.png',
+        'file' => '41.png',
         'name' => 'Scratched 3',
         'dark' => true,
     ],
     [
-        'file' => 'd6.png',
+        'file' => '42.png',
         'name' => 'Triangles mosaic 2',
         'dark' => true,
     ],
     [
-        'file' => 'd7.png',
+        'file' => '43.png',
         'name' => 'Rotated large grid 2',
         'dark' => true,
     ],
     [
-        'file' => 'd8.png',
+        'file' => '44.png',
         'name' => 'Flowers',
         'dark' => true,
     ],
     [
-        'file' => 'd9.png',
+        'file' => '45.png',
         'name' => 'Birds',
         'dark' => true,
     ],
     [
-        'file' => 'd10.png',
+        'file' => '46.png',
         'name' => 'Fading grid',
         'dark' => true,
     ],
     [
-        'file' => 'd11.png',
+        'file' => '47.png',
         'name' => 'Dust',
         'dark' => true,
     ],
     [
-        'file' => 'd12.png',
+        'file' => '48.png',
         'name' => 'Sprays',
         'dark' => true,
     ],
     [
-        'file' => 'd13.png',
+        'file' => '49.png',
         'name' => 'The bear\'s hair',
         'dark' => true,
     ],
     [
-        'file' => 'd14.png',
+        'file' => '50.png',
         'name' => 'Abstract circles',
         'dark' => true,
     ],

@@ -7,15 +7,10 @@ if (!defined('SL_ROOT')) exit;
 
 $config = Template::getCurrent()->getConfig();
 
-// content column size
-$content_size = "";
-if (!$config['show_left_sidebar'] && !$config['show_right_sidebar']) {
-    $content_size = "md-twelve lg-twelve";
-} elseif ($config['show_left_sidebar'] && $config['show_right_sidebar']) {
-    $content_size = "md-six lg-six";
-} else {
-    $content_size = "md-nine lg-nine";
-}
+$breadcrumbs = ($config['show_breadcrumbs'] ? Template::breadcrumbs([], true) : '');
+$leftBox = ($config['show_left_sidebar'] ? (include __DIR__ . DIRECTORY_SEPARATOR . 'script/includes/left_box.php') : '');;
+$rightBox = ($config['show_right_sidebar'] ? (include __DIR__ . DIRECTORY_SEPARATOR . 'script/includes/right_box.php') : '');;
+
 ?>
 
 <div id="mobileNav" class="sidenav" style="">
@@ -26,71 +21,84 @@ if (!$config['show_left_sidebar'] && !$config['show_right_sidebar']) {
     <div class="cleaner"></div>
 </div>
 
-<div id="wrapper" class="container">
+<div class="wrapper container-fluid">
 
-    <div class="container header-container">
-        <div class="superheader">
+    <section>
 
-            <div id="header-usermenu" class="row">
-                <div class="xs-twelve column"><?= Template::userMenu(); ?></div>
-            </div>
+        <header>
 
-            <div id="header" class="row">
-                <div id="logo" class="xs-ten sm-ten md-eight column">
-                    <div class="site-name">
-                        <a href="<?= _e(Template::sitePath()); ?>"><?= Template::siteTitle(); ?></a>
+            <nav id="user-menu" class="row">
+                <div id="header-usermenu" class="col-xs-12">
+                    <div class="box"><?= Template::userMenu(); ?></div>
+                </div>
+            </nav>
+
+            <div class="row">
+
+                <div id="logo" class="col-xs-10 col-sm-6 col-md-8">
+                    <div class="box">
+                        <div class="site-name">
+                            <a href="<?= _e(Template::sitePath()); ?>"><?= Template::siteTitle(); ?></a>
+                        </div>
+                        <span class="site-description"><?= Template::siteDescription(); ?></span>
                     </div>
-                    <span class="site-description"><?= Template::siteDescription(); ?></span>
                 </div>
-                <div class="xs-two sm-two columns mobile-nav">
-                    <span class="pull-right side-menu-hidden hamburger-icon" onclick="javascript:openNav()">&#9776;</span>
+
+                <div class="col-xs-2 mobile-nav">
+                    <div id="hamburger-menu" class="box">
+                        <span class="hamburger-icon" onclick="javascript:openNav()">&#9776;</span>
+                    </div>
                 </div>
-                <div id="seachbox" class="xs-twelve sm-twelve md-four column"><?= Hcm::parse("[hcm]search[/hcm]"); ?></div>
+
+                <div id="seachbox" class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="box">
+                        <?= Hcm::parse("[hcm]search[/hcm]"); ?>
+                    </div>
+                </div>
+
             </div>
-        </div>
 
-    </div>
-
-    <div class="container mainmenu-container">
-        <div id="menu" class="row">
-            <div class="twelve column"><?= Template::menu($config['menu_start'], $config['menu_end']); ?></div>
-        </div>
-        <?php
-        if ($config['show_breadcrumbs']) {
-            echo '<div id="breadcrumbs" class="row"><div class="twelve column"><span>' . _lang('chameleon.breadcrumb_caption') . ': </span>' . Template::breadcrumbs() . '</div></div>';
-        }
-        ?>
-    </div>
-
-    <div id="page" class="container content-container">
-        <div class="row">
-            <?php
-            if ($config['show_left_sidebar']) {
-                echo '<div id="left_sidebar" class="md-three column">'
-                    . Template::boxes($config['switch_sidebars'] ? 'right' : 'left')
-                    . '</div>';
-            }
-            ?>
-            <div id="content" class="<?= $content_size; ?> column">
-                <?= Template::content(); ?>
+            <div id="menu" class="col-xs-12">
+                <div class="box"><?= Template::menu($config['menu_start'], $config['menu_end']); ?></div>
             </div>
-            <?php
-            if ($config['show_right_sidebar']) {
-                echo '<div id="right_sidebar" class="md-three column">'
-                    . Template::boxes($config['switch_sidebars'] ? 'left' : 'right')
-                    . '</div>';
-            }
-            ?>
-        </div>
-    </div>
+
+        </header>
+
+        <section id="page">
+
+            <?= $breadcrumbs ?>
+
+            <div class="row">
+
+                <?= $leftBox ?>
+
+                <div id="content" class="col-xs first-xs">
+                    <div class="box">
+                        <?= Template::heading(); ?>
+                        <?= Template::content(); ?>
+                    </div>
+                </div>
+
+                <?= $rightBox ?>
+
+            </div>
+
+        </section>
+
+    </section>
+
 </div>
 
-<div id="footer">
-    <ul><?= Template::links(); ?>
-        <li>
-            <small>ChameleonTheme by</small>
-            <a href="https://jdanek.eu" target="_blank">jDanek</a>
-        </li>
-    </ul>
+<div id="footer" class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <ul><?= Template::links(); ?>
+                <li>
+                    Template Chameleon by
+                    <a href="https://github.com/friends-of-sunlight-cms/" target="_blank">Friends of SunLight CMS</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <script src="<?= Template::asset('public/js/menu.js') ?>"></script>

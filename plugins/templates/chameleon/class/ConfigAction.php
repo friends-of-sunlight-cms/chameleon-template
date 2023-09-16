@@ -13,15 +13,15 @@ use Sunlight\Util\Form;
 class ConfigAction extends BaseConfigAction
 {
     public const THEME_ID = 'chameleon';
-    
+
     /** @var $plugin TemplatePlugin */
     protected $plugin;
 
     public function __construct(Plugin $plugin)
     {
         $this->plugin = $plugin;
-        // register lang for administration
-        Core::$dictionary->registerSubDictionary(self::THEME_ID, new LocalizationDirectory(
+        // register lang for config
+        Core::$dictionary->registerSubDictionary('chameleon', new LocalizationDirectory(
             __DIR__ . DIRECTORY_SEPARATOR . '../lang/'
         ));
         parent::__construct($plugin);
@@ -64,12 +64,12 @@ class ConfigAction extends BaseConfigAction
             // menu
             'menu_start' => [
                 'label' => _lang(self::THEME_ID . '.menu_start'),
-                'input' => '<input type="number" min="0" name="config[menu_start]" value="' . $config['menu_start'] . '" class="inputmini">',
+                'input' => '<input type="number" min="0" name="config[menu_start]" value="' . Form::restorePostValue('menu_start', $config['menu_start'], false) . '" class="inputmini">',
                 'type' => 'text'
             ],
             'menu_end' => [
                 'label' => _lang(self::THEME_ID . '.menu_end'),
-                'input' => '<input type="number" min="0" name="config[menu_end]" value="' . $config['menu_end'] . '" class="inputmini">',
+                'input' => '<input type="number" min="0" name="config[menu_end]" value="' . Form::restorePostValue('menu_end', $config['menu_end'], false) . '" class="inputmini">',
                 'type' => 'text'
             ],
 
@@ -92,6 +92,12 @@ class ConfigAction extends BaseConfigAction
             'header' => [
                 'label' => _lang(self::THEME_ID . '.header'),
                 'input' => $this->createSelect('header', $header_list, $config['header']),
+                'type' => 'text'
+            ],
+            'header_custom' => [
+                'label' => _lang(self::THEME_ID . '.header_custom')
+                    . '<br><small>(1240px x 240px)</small>',
+                'input' => '<input type="text" name="config[header_custom]" value="' . Form::restorePostValue('header_custom', $config['header_custom'], false) . '" class="inputmedium" placeholder="upload/...">',
                 'type' => 'text'
             ],
             'dark_mode' => [
@@ -124,11 +130,6 @@ class ConfigAction extends BaseConfigAction
             'show_right_sidebar' => [
                 'label' => _lang(self::THEME_ID . '.right.sidebar'),
                 'input' => '<input type="checkbox" name="config[show_right_sidebar]" value="1"' . Form::activateCheckbox($config['show_right_sidebar']) . '>',
-                'type' => 'checkbox'
-            ],
-            'switch_sidebars' => [
-                'label' => _lang(self::THEME_ID . '.switch.sidebars'),
-                'input' => '<input type="checkbox" name="config[switch_sidebars]" value="1"' . Form::activateCheckbox($config['switch_sidebars']) . '>',
                 'type' => 'checkbox'
             ],
         ];

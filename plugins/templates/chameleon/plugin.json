@@ -2,7 +2,8 @@
     "$schema": "../../../system/schema/template.json",
     "name": "Chameleon",
     "description": "Optionally adjustable theme",
-	"authors": [
+    "authors": [
+        {"name": "jDanek", "url": "https://jdanek.eu/"},
         {"name": "Friends of Sunlight CMS", "url": "https://github.com/friends-of-sunlight-cms/"}
     ],
     "version": "1.0.0",
@@ -17,20 +18,20 @@
         "pattern": 1,
         "pattern_counter": 50,
         "header": "header_bg0.png",
+        "header_custom": "",
         "dark_mode": false,
         "rounded": false,
         "show_breadcrumbs": false,
-        "random": true,
+        "random": false,
         "show_left_sidebar": false,
-        "show_right_sidebar": true,
-        "switch_sidebars": false
+        "show_right_sidebar": true
     },
     "actions": {
         "config": "ConfigAction"
     },
     "responsive": true,
     "css": [
-        "public/styles/regrid.css",
+        "public/styles/flexboxgrid.min.css",
         "public/styles/style.php"
     ],
     "js": [
@@ -49,5 +50,8 @@
     "box.parent": "ul",
     "box.item": "li",
     "box.title": "h2",
-    "box.title.inside": true
+    "box.title.inside": true,
+    "events": [
+        {"event": "tpl.breadcrumbs", "method": "onBreadcrumbs"}
+    ]
 }
